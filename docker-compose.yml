@@ -1,0 +1,7 @@
+version: '3'
+services:
+  app:
+    image: user_seed_service
+    ports:
+      - "3000:3000"
+    network_mode: bridge
