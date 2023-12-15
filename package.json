@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "tsc && node dist/app.js",
+    "build": "tsc",
+    "start": "node dist/app.js",
     "test": "jest --config ./jestconfig.ts",
     "test:lint:fix": "eslint . --ext .ts --fix"
   },

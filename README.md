@@ -26,7 +26,7 @@ Application aims to seed the randomly generated users from an [external api](htt
 2. Open terminal from the root folder and execute the command to build application image locally: 
 `docker build -t user_seed_service .`
 
-3. Run command to start the application: ` docker-compose up`
+3. Run command to start the application: `docker compose up`
 4. The application would be up and running on the specified port. 
 `http://localhost:3000`
 
