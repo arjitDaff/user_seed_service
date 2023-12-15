@@ -147,4 +147,4 @@ const UserSchema = new Schema<IUser>({
 // Create user model
 const UserModel = mongoose.model<IUser>('User', UserSchema);
 
-export {IUser, UserModel};
+export { IUser, UserModel };

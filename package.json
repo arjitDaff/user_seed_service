@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/app.js",
-    "test": "jest --config ./jestconfig.js"
+    "test": "jest --config ./jestconfig.ts",
+    "test:lint:fix": "eslint . --ext .js --fix"
   },
   "_moduleAliases": {
     "@src": "./src"
@@ -16,6 +17,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.11",
     "@types/node": "^20.10.4",
+    "eslint": "^8.55.0",
     "jest": "^29.7.0",
     "nodemon": "^3.0.2",
     "ts-jest": "^29.1.1",

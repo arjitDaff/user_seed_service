@@ -1,7 +1,7 @@
-import {IItems, IPagination } from '../contracts/users';
-import {UserModel} from '../models/users';
+import { IItems, IPagination } from '../contracts/users';
+import { UserModel } from '../models/users';
 import logger from '../utils/logger';
-import {IUser} from '../models/users'
+import { IUser } from '../models/users'
 
 /**
  * Asynchronous service function that inserts an array of user data into the database using
@@ -28,15 +28,15 @@ export const insertUsersService = async (users: Array<IUser>) => {
  * @param {any} query - The query parameters for filtering, sorting, and pagination.
  * @returns {Promise<IPagination>} A promise resolving to the paginated list of users.
  */
-export const getAllUsersService = async (query: Record<string, any>) : Promise<IPagination> => {   
+export const getAllUsersService = async (query: Record<string, any>): Promise<IPagination> => {
     try {
         const { match, sort, skip, limit, page } = query;
         //Quering user collection
         const users = await UserModel.find(match).sort(sort).skip(skip).limit(limit);
         const usersCount = await UserModel.find(match).countDocuments();
-    
-         // Maping users to IItems format
-         const items: IItems[] = users.map(user => ({
+
+        // Maping users to IItems format
+        const items: IItems[] = users.map(user => ({
             id: user._id.toString(),
             gender: user.gender,
             name: `${user.name.first} ${user.name.last}`,
@@ -50,11 +50,11 @@ export const getAllUsersService = async (query: Record<string, any>) : Promise<I
             age: String(user.dob.age),
             picture: user.picture.large,
             createdAt: user.createdAt,
-          }));
+        }));
         const totalCount = usersCount;
-    
+
         return { total: totalCount, limit, page, sortBy: query.sortBy || '', items };
-    } catch(e) {
+    } catch (e) {
         throw e;
     }
 } 

@@ -1,12 +1,12 @@
 import { REQUEST_INTERVAL, RESCHEDULE_INTERVAL } from '../constants/appConstants';
 import { IUser } from '../models/users';
 import logger from '../utils/logger';
-import {insertUsersService} from './userService';
+import { insertUsersService } from './userService';
 import axiosInstance from '../utils/axios';
 import { API_URI, BATCH_SIZE } from '../constants/appConstants';
 
 // Queue to store users
-const userQueue:Array<Array<IUser>> = [];
+const userQueue: Array<Array<IUser>> = [];
 // Flag to determine if processing is in progress
 let processingInProgress = false;
 
@@ -20,12 +20,12 @@ export const jobScheduler = () => {
             const users: Array<IUser> = await fetchUsers();
             userQueue.push(users);
             processQueue();
-        } catch (error:any) {
+        } catch (error: any) {
             clearInterval(interval);
             logger.info(`Failure fetching user: ${error.message}. Try decreasing the batch size`);
-            setTimeout(jobScheduler, RESCHEDULE_INTERVAL*1000);
+            setTimeout(jobScheduler, RESCHEDULE_INTERVAL * 1000);
         }
-    }, REQUEST_INTERVAL*1000)
+    }, REQUEST_INTERVAL * 1000)
 }
 
 /**
@@ -34,12 +34,12 @@ export const jobScheduler = () => {
  * @returns {Array} An array of user results from the external API.
  * @throws {Error} Throws an error if the API request fails.
  */
-async function fetchUsers () {
+async function fetchUsers() {
     try {
         logger.info('Started fetching users from external Api');
-        const response = await axiosInstance.get(API_URI, {params: {results:BATCH_SIZE}});
+        const response = await axiosInstance.get(API_URI, { params: { results: BATCH_SIZE } });
         return response?.data?.results
-    } catch(error: any) {
+    } catch (error: any) {
         throw error;
     }
 }
@@ -51,7 +51,7 @@ async function fetchUsers () {
  */
 async function processQueue() {
     if (userQueue.length === 0 || processingInProgress) {
-      return;
+        return;
     }
     const users: Array<IUser> | undefined = userQueue.shift();
     if (users === undefined) {
@@ -60,10 +60,10 @@ async function processQueue() {
     logger.info('Processing user queue');
     processingInProgress = true;
     try {
-      await insertUsersService(users);
+        await insertUsersService(users);
     } finally {
-      processingInProgress = false;
-      processQueue(); 
+        processingInProgress = false;
+        processQueue();
     }
-  }
-  
+}
+

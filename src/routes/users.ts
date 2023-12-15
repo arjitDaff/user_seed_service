@@ -25,13 +25,13 @@ const getAllUsersHandler = async (req: Request, res: Response, next: NextFunctio
             message: 'User list fetch successfully',
             data: await getAllUsers(req.query)
         });
-    } catch(e) {
+    } catch (e) {
         next(e);
     }
 }
 
-router.get('/', 
+router.get('/',
     getAllUsersHandler
 );
 
-export default {router, getAllUsersHandler};
+export default { router, getAllUsersHandler };

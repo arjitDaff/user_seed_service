@@ -1,5 +1,5 @@
 const tv4 = require('tv4');
-import { INVALID_JSON_ERROR, NON_EMPTY_OR_BLANK_ERROR , POSITIVE_NUMBER_ERROR} from '../constants/errorResponse';
+import { INVALID_JSON_ERROR, NON_EMPTY_OR_BLANK_ERROR, POSITIVE_NUMBER_ERROR } from '../constants/errorResponse';
 
 
 const tv4Formats = {
@@ -18,8 +18,8 @@ const tv4Formats = {
       return INVALID_JSON_ERROR;
     }
   },
-  
-  positiveNumeric: function(data:number) {
+
+  positiveNumeric: function (data: number) {
     return data >= 0 ? null : POSITIVE_NUMBER_ERROR;
   },
 }
@@ -32,7 +32,7 @@ tv4.addFormat(tv4Formats);
  * @param {*} data data to validate.
  * @param {object} schema tv4 schema object.
  */
-export function validate(data:Record<string, any>, schema:Record<string, any>) {
+export function validate(data: Record<string, any>, schema: Record<string, any>) {
   // validate
   const result = tv4.validateResult(data, schema, false, true);
 

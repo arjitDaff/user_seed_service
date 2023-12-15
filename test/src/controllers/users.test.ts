@@ -70,6 +70,20 @@ describe('UserControllers', () => {
             expect(userService.getAllUsersService).toHaveBeenCalledWith({
                 match: {
                     $or: [
+                        {
+                            "$expr": {
+                                "$eq":  [
+                                    {
+                                    "$concat":  [
+                                        "$name.first",
+                                        " ",
+                                        "$name.last",
+                                    ],
+                                    },
+                                    "Madeleine Green",
+                                ],
+                            },
+                        },
                         { 'name.first': { $regex: 'Madeleine Green', $options: 'i' } },
                         { 'name.last': { $regex: 'Madeleine Green', $options: 'i' } },
                     ],
@@ -99,7 +113,7 @@ describe('UserControllers', () => {
             await getAllUsers(query);
     
             expect(userService.getAllUsersService).toHaveBeenCalledWith({
-                match: {"dob.age":{ $regex: '25', $options: 'i' }},
+                match: {"dob.age": "25"},
                 sort: { 'name.first': 1, 'name.last': 1 },
                 skip: 5,
                 limit: 5,
@@ -125,7 +139,7 @@ describe('UserControllers', () => {
             await getAllUsers(query);
     
             expect(userService.getAllUsersService).toHaveBeenCalledWith({
-                match: {"gender":{ $eq: 'male', $options: 'i' }},
+                match: {"gender":{ $eq: 'male'}},
                 sort: { 'name.first': 1, 'name.last': 1 },
                 skip: 5,
                 limit: 5,
