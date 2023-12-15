@@ -15,6 +15,8 @@ let processingInProgress = false;
  */
 export const jobScheduler = () => {
     let interval: ReturnType<typeof setInterval>;
+    const requestInterval = Number(process.env.REQUEST_INTERVAL) || REQUEST_INTERVAL;
+    const rescheduleInterval = Number(process.env.RESCHEDULE_INTERVAL) || RESCHEDULE_INTERVAL;
     interval = setInterval(async () => {
         try {
             const users: Array<IUser> = await fetchUsers();
@@ -23,9 +25,9 @@ export const jobScheduler = () => {
         } catch (error: any) {
             clearInterval(interval);
             logger.info(`Failure fetching user: ${error.message}. Try decreasing the batch size`);
-            setTimeout(jobScheduler, RESCHEDULE_INTERVAL * 1000);
+            setTimeout(jobScheduler, rescheduleInterval * 1000);
         }
-    }, REQUEST_INTERVAL * 1000)
+    }, requestInterval* 1000)
 }
 
 /**
@@ -36,8 +38,9 @@ export const jobScheduler = () => {
  */
 async function fetchUsers() {
     try {
+        const batchSize = Number(process.env.BATCH_SIZE) || BATCH_SIZE;
         logger.info('Started fetching users from external Api');
-        const response = await axiosInstance.get(API_URI, { params: { results: BATCH_SIZE } });
+        const response = await axiosInstance.get(API_URI, { params: { results: batchSize } });
         return response?.data?.results
     } catch (error: any) {
         throw error;
@@ -66,4 +69,3 @@ async function processQueue() {
         processQueue();
     }
 }
-

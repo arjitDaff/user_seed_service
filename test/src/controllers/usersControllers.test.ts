@@ -1,5 +1,5 @@
 import * as userService from '../../../src/services/userService'; 
-import {getAllUsers} from '../../../src/controllers/users';
+import {getAllUsers} from '../../../src/controllers/usersController';
 
 describe('UserControllers', () => {
     afterEach(() => {

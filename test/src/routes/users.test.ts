@@ -1,17 +1,9 @@
 // users.test.ts
 import { Request, Response, NextFunction } from 'express';
 import userRoutes from '../../../src/routes/users';
-import * as usersController from '../../../src/controllers/users';
-import logger from '../../../src/utils/logger';
+import * as usersController from '../../../src/controllers/usersController';
 import {validate} from '../../../src/utils/validator';
-import {listUserSchema, dynamicSearchFilter} from '../../../src/schemas/users';
-
-jest.mock('../../../src/utils/logger', () => {
-    return {
-        info: jest.fn(),
-        error: jest.fn(),
-    };
-});
+import {querySchema, searchFilterSchema} from '../../../src/schemas/users';
 
 jest.mock('../../../src/utils/validator', () => {
     return {
@@ -61,19 +53,12 @@ describe('getAllUsersHandler', () => {
         jest.spyOn(usersController, 'getAllUsers').mockResolvedValue(JSON.parse(JSON.stringify(response)));        
     }); 
 
-    it('should call "logger.info" once with correct parameter', async () => {
-        await userRoutes.getAllUsersHandler(req as Request, res as Response, next);
-
-        expect(logger.info).toHaveBeenCalledTimes(1);
-        expect(logger.info).toHaveBeenCalledWith(`List all users request with query: ${JSON.stringify(req.query)}`);
-    });
-
     it('should call "validate" twice with correct parameter', async () => {
         await userRoutes.getAllUsersHandler(req as Request, res as Response, next);
 
         expect(validate).toHaveBeenCalledTimes(2);
-        expect(validate).toHaveBeenNthCalledWith(1, req.query, listUserSchema);
-        expect(validate).toHaveBeenNthCalledWith(2, JSON.parse(req.query.search), dynamicSearchFilter);
+        expect(validate).toHaveBeenNthCalledWith(1, req.query, querySchema);
+        expect(validate).toHaveBeenNthCalledWith(2, JSON.parse(req.query.search), searchFilterSchema);
     });
 
     it('should call "validate" once if search parameter is received', async () => {
@@ -81,7 +66,7 @@ describe('getAllUsersHandler', () => {
         await userRoutes.getAllUsersHandler(req as Request, res as Response, next);
 
         expect(validate).toHaveBeenCalledTimes(1);
-        expect(validate).toHaveBeenCalledWith(req.query, listUserSchema);
+        expect(validate).toHaveBeenCalledWith(req.query, querySchema);
     });
 
     it ('should call getAllUsers once with correct parameter', async () => {

@@ -17,8 +17,8 @@ Application aims to seed the randomly generated users from an [external api](htt
 
 3. API_URI - `API to fetch random users`
 4. BATCH_SIZE - `Number of users to fetch in single batch`
-5. REQUEST_INTERVAL - `Interval between two requests to fetch users`
-6. RESCHEDULE_INTERVAL - `Time interval after which the scheduler will run again (in case previous request fails)`
+5. REQUEST_INTERVAL - `Interval between two requests to fetch users(in seconds)`
+6. RESCHEDULE_INTERVAL - `Time interval after which the scheduler will run again (in case previous request fails, in seconds)`
 
 ## Start Application
 
@@ -63,6 +63,7 @@ Used to sort the list. Accepts the following values:
 - `name`
 - `country`
 - `age`
+- `createdAt`
 
 By default, the list is sorted by `createdAt`.
 

@@ -7,6 +7,10 @@ import userRoutes from './src/routes/users';
 
 // Fetching environment variables
 const DATABASE_CONNECTION_STRING: string = process.env.MONGODB_URI || '';
+if (DATABASE_CONNECTION_STRING === '') {
+  logger.error('MONGODB_URI environment variable not set');
+  process.exit(1);
+}
 const PORT: number = Number(process.env.PORT) || 3000;
 
 // Initializing express application
@@ -29,10 +33,10 @@ app.use((err: Error, req : Request, res: Response, next: NextFunction) => {
   })
 });
 
-let server; 
 // Function to initialize database connection and start the server
 async function startServer() {
   try {
+    let server; 
     await connect(DATABASE_CONNECTION_STRING);
     logger.info('Database connected');
 
@@ -57,5 +61,4 @@ startServer();
 process.on('unhandledRejection', (err: any) => {
   logger.error('UNHANDLED REJECTION! 💥 Shutting down...');
   logger.error(err.name, err.message);
-    process.exit(1);
 });

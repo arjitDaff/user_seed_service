@@ -1,9 +1,8 @@
-import express, { NextFunction } from 'express';
+import express, { NextFunction, query } from 'express';
 import { Request, Response } from 'express';
-import { getAllUsers } from '../controllers/users';
-import logger from '../utils/logger';
+import { getAllUsers } from '../controllers/usersController';
 import { validate } from '../utils/validator';
-import { dynamicSearchFilter, listUserSchema } from '../schemas/users';
+import { searchFilterSchema, querySchema } from '../schemas/users';
 const router = express.Router();
 
 /**
@@ -15,11 +14,10 @@ const router = express.Router();
  */
 const getAllUsersHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        logger.info(`List all users request with query: ${JSON.stringify(req.query)}`);
-        validate(req.query, listUserSchema);
+        validate(req.query, querySchema);
         if (req.query.search) {
             const search = req.query.search as string;
-            validate(JSON.parse(search), dynamicSearchFilter)
+            validate(JSON.parse(search), searchFilterSchema)
         }
         res.json({
             message: 'User list fetch successfully',

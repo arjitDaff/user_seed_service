@@ -1,20 +1,19 @@
 import { PATTERN } from '../constants/appConstants';
 
 // Schema rules defined for query parameters
-export const listUserSchema = {
+export const querySchema = {
   type: 'object',
   properties: {
     limit: { type: 'string', pattern: PATTERN.STRING_OF_DIGITS_REGEX },
-    skip: { type: 'string', pattern: PATTERN.STRING_OF_DIGITS_REGEX },
+    page: { type: 'string', pattern: PATTERN.STRING_OF_DIGITS_REGEX },
     order: { type: 'string', enum: ['asc', 'desc'] },
-    sortBy: { type: 'string', enum: ['name', 'country', 'age'] },
+    sortBy: { type: 'string', enum: ['name', 'country', 'age', 'createdAt'] },
     search: { type: 'string', format: 'jsonObject' },
-  },
-  additionalProperties: true,
+  }
 }
 
 // Schema rules defined for dynamic search object
-export const dynamicSearchFilter = {
+export const searchFilterSchema = {
   type: 'object',
   properties: {
     name: { type: 'string', format: 'nonEmptyOrBlank' },
