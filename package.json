@@ -6,10 +6,6 @@
     "build": "tsc",
     "start": "node dist/app.js",
     "test": "jest --config ./jestconfig.ts",
-    "test:lint:fix": "eslint . --ext .js --fix"
-  },
-  "_moduleAliases": {
-    "@src": "./src"
   },
   "keywords": [],
   "author": "",
