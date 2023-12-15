@@ -59,6 +59,6 @@ startServer();
 
 // Handling unhandled promise rejections
 process.on('unhandledRejection', (err: any) => {
-  logger.error('UNHANDLED REJECTION! 💥 Shutting down...');
+  logger.error('UNHANDLED REJECTION!');
   logger.error(err.name, err.message);
 });
