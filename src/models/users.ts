@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 // Location coordinates
 interface ICoordinates {
@@ -56,7 +56,6 @@ interface IDob {
 // Date of registration of user
 interface IRegistered {
   date: string;
-  age: number;
 }
 
 // Profile URL of user
@@ -83,7 +82,7 @@ interface IUser {
 }
 
 // Create user schema
-const UserSchema = new Schema<IUser>({
+const userSchema = new Schema<IUser>({
   gender: String,
   name: {
     title: String,
@@ -108,7 +107,10 @@ const UserSchema = new Schema<IUser>({
       description: String,
     },
   },
-  email: String,
+  email: {
+    type: String,
+    unique: true,
+  },
   login: {
     uuid: {
       type: String,
@@ -127,7 +129,6 @@ const UserSchema = new Schema<IUser>({
   },
   registered: {
     date: String,
-    age: Number,
   },
   phone: String,
   cell: String,
@@ -145,7 +146,7 @@ const UserSchema = new Schema<IUser>({
 );
 
 // Create user model
-const UserModel = mongoose.model<IUser>('User', UserSchema);
+const UserModel = mongoose.model<IUser>('User', userSchema);
 
 export { IUser, UserModel };
 

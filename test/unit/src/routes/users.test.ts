@@ -1,11 +1,11 @@
 // users.test.ts
 import { Request, Response, NextFunction } from 'express';
-import userRoutes from '../../../src/routes/users';
-import * as usersController from '../../../src/controllers/usersController';
-import {validate} from '../../../src/utils/validator';
-import {querySchema, searchFilterSchema} from '../../../src/schemas/users';
+import userRoutes from '../../../../src/routes/users';
+import * as usersController from '../../../../src/controllers/usersController';
+import {validate} from '../../../../src/utils/validator';
+import {querySchema, searchFilterSchema} from '../../../../src/schemas/users';
 
-jest.mock('../../../src/utils/validator', () => {
+jest.mock('../../../../src/utils/validator', () => {
     return {
         validate: jest.fn(),
     };

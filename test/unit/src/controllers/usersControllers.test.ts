@@ -1,5 +1,5 @@
-import * as userService from '../../../src/services/userService'; 
-import {getAllUsers} from '../../../src/controllers/usersController';
+import * as userService from '../../../../src/services/userService'; 
+import {getAllUsers} from '../../../../src/controllers/usersController';
 
 describe('UserControllers', () => {
     afterEach(() => {
@@ -45,14 +45,14 @@ describe('UserControllers', () => {
                 ],
             };
     
-            jest.spyOn(userService, 'getAllUsersService').mockResolvedValue(result);
+            jest.spyOn(userService, 'getAllUsers').mockResolvedValue(result);
         });
 
-        it('should call "getAllUsersService" once with correct parameter', async () => {
+        it('should call "getAllUsers" once with correct parameter', async () => {
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledTimes(1);
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
+            expect(userService.getAllUsers).toHaveBeenCalledTimes(1);
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
                 match: {},
                 sort: { 'name.first': 1, 'name.last': 1 },
                 skip: 5,
@@ -62,12 +62,12 @@ describe('UserControllers', () => {
         });
 
     
-        it('should call "getAllUsersService" with correct parameter if search for name is given', async () => {
+        it('should call "getAllUsers" with correct parameter if search for name is given', async () => {
             query.search = '{"name":"Madeleine Green"}';
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledTimes(1);
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
+            expect(userService.getAllUsers).toHaveBeenCalledTimes(1);
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
                 match: {
                     $or: [
                         {
@@ -95,11 +95,11 @@ describe('UserControllers', () => {
             });
         });
 
-        it('should call "getAllUsersService" with correct parameter if search for country is given in query parameter', async () => {
+        it('should call "getAllUsers" with correct parameter if search for country is given in query parameter', async () => {
             query.search = '{"country":"test"}';
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
                 match: {"location.country":{ $regex: 'test', $options: 'i' }},
                 sort: { 'name.first': 1, 'name.last': 1 },
                 skip: 5,
@@ -108,11 +108,11 @@ describe('UserControllers', () => {
             });
         });
 
-        it('should call "getAllUsersService" with correct parameter if search for age is given in query parameter', async () => {
+        it('should call "getAllUsers" with correct parameter if search for age is given in query parameter', async () => {
             query.search = '{"age":"25"}';
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
                 match: {"dob.age": "25"},
                 sort: { 'name.first': 1, 'name.last': 1 },
                 skip: 5,
@@ -121,11 +121,11 @@ describe('UserControllers', () => {
             });
         });
 
-        it('should call "getAllUsersService" with correct parameter if search for email is given in query parameter', async () => {
+        it('should call "getAllUsers" with correct parameter if search for email is given in query parameter', async () => {
             query.search = '{"email":"abc@example.com"}';
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
                 match: {"email": "abc@example.com"},
                 sort: { 'name.first': 1, 'name.last': 1 },
                 skip: 5,
@@ -134,12 +134,12 @@ describe('UserControllers', () => {
             });
         });
 
-        it('should call "getAllUsersService" with correct parameter if search for gender is given in query parameter', async () => {
+        it('should call "getAllUsers" with correct parameter if search for gender is given in query parameter', async () => {
             query.search = '{"gender":"male"}';
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
-                match: {"gender":{ $eq: 'male'}},
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
+                match: {"gender":'male'},
                 sort: { 'name.first': 1, 'name.last': 1 },
                 skip: 5,
                 limit: 5,
@@ -147,11 +147,11 @@ describe('UserControllers', () => {
             });
         });
 
-        it('should call "getAllUsersService" with correct parameter if sortBy is "country"', async () => {
+        it('should call "getAllUsers" with correct parameter if sortBy is "country"', async () => {
             query.sortBy = 'country';
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
                 match: {},
                 sort: { 'location.country': 1 },
                 skip: 5,
@@ -160,11 +160,11 @@ describe('UserControllers', () => {
             });
         });
 
-        it('should call "getAllUsersService" with correct parameter if sortBy is "age"', async () => {
+        it('should call "getAllUsers" with correct parameter if sortBy is "age"', async () => {
             query.sortBy = 'age';
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
                 match: {},
                 sort: { 'dob.age': 1 },
                 skip: 5,
@@ -173,11 +173,11 @@ describe('UserControllers', () => {
             });
         });
 
-        it('should call "getAllUsersService" with correct parameter if sortBy is not given', async () => {
+        it('should call "getAllUsers" with correct parameter if sortBy is not given', async () => {
             delete query.sortBy;
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
                 match: {},
                 sort: {"createdAt": 1},
                 skip: 5,
@@ -186,11 +186,11 @@ describe('UserControllers', () => {
             });
         });
 
-        it('should call "getAllUsersService" with correct parameter if limit is not given', async () => {
+        it('should call "getAllUsers" with correct parameter if limit is not given', async () => {
             delete query.limit;
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
                 match: {},
                 sort: {'name.first': 1, 'name.last': 1 },
                 skip: 10,
@@ -199,11 +199,11 @@ describe('UserControllers', () => {
             });
         });
 
-        it('should call "getAllUsersService" with correct parameter if page is not given', async () => {
+        it('should call "getAllUsers" with correct parameter if page is not given', async () => {
             delete query.page;
             await getAllUsers(query);
     
-            expect(userService.getAllUsersService).toHaveBeenCalledWith({
+            expect(userService.getAllUsers).toHaveBeenCalledWith({
                 match: {},
                 sort: {'name.first': 1, 'name.last': 1 },
                 skip: 0,
@@ -212,8 +212,8 @@ describe('UserControllers', () => {
             });
         });
     
-        it('should throw error if "getAllUsersService" throw error', async () => {
-            jest.spyOn(userService, 'getAllUsersService').mockRejectedValue(new Error('Some error'));
+        it('should throw error if "getAllUsers" throw error', async () => {
+            jest.spyOn(userService, 'getAllUsers').mockRejectedValue(new Error('Some error'));
     
             await expect(() => getAllUsers(query)).rejects.toThrow('Some error');
         });

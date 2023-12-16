@@ -1,7 +1,7 @@
 import express, {Application, NextFunction, Request, Response} from 'express';
 import {connect} from "mongoose";
 import 'dotenv/config'
-import { jobScheduler } from './src/services/scheduler';
+import { initScheduler } from './src/services/scheduler';
 import logger from './src/utils/logger';
 import userRoutes from './src/routes/users';
 
@@ -46,7 +46,7 @@ async function startServer() {
     });
 
     // Start scheduler to fetch users after the database is connected
-    jobScheduler();
+    initScheduler();
 
   } catch (error) {
     logger.error('Error connecting to the database:', error);

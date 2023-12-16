@@ -7,7 +7,6 @@ const logger = createLogger({
     format.printf(info => `${info.timestamp} - ${info.message}`)
   ),
   transports: [
-    new transports.Console(),
     new transports.File({ filename: 'logs/server.log' })
   ]
 });

@@ -1,69 +1,83 @@
-import { getAllUsersService } from '../services/userService';
+import * as userService from '../services/userService';
 import { IResponse } from '../contracts/IResponse';
 
+// Function to apply search field to the match object
+const applySearchField = (field: string, searchFieldValue: string, match: Record<string, any>) => {
+    switch (field) {
+        case 'name':
+            match.$or = [
+                {
+                    $expr: {
+                        $eq: [
+                            {
+                                $concat: [
+                                    "$name.first",
+                                    " ",
+                                    "$name.last"
+                                ]
+                            },
+                            searchFieldValue.trim()
+                        ]
+                    }
+                },
+                { 'name.first': { $regex: searchFieldValue.trim(), $options: 'i' } },
+                { 'name.last': { $regex: searchFieldValue.trim(), $options: 'i' } }
+            ];
+            break;
+
+        case 'country':
+        case 'city':
+        case 'state':
+            match[`location.${field}`] = { $regex: searchFieldValue.trim(), $options: 'i' };
+            break;
+
+        case 'age':
+            match['dob.age'] = searchFieldValue;
+            break;
+
+        case 'gender':
+        case 'email':
+            match[field] = searchFieldValue.trim();
+            break;
+        default:
+            break;
+    }
+};
+
 /**
- * Asynchronous function that retrieves a paginated list of users based on the provided query parameters.
- * It uses the getAllUsersService function to perform the actual retrieval.
- * 
+ * Function that retrieves a paginated list of users based on the provided query parameters.
  * @param {any} query - The query parameters for filtering, sorting, and pagination.
  * @returns {Promise<IResponse>} A promise resolving to the paginated list of users.
  */
-
 export const getAllUsers = async (query: Record<string, any>): Promise<IResponse> => {
-
     // Dynamic search query
     const match: Record<string, any> = {};
     if (query.search) {
         const searchFields = JSON.parse(query.search);
         for (const field in searchFields) {
-            if (field === 'name') {
-                match.$or = [
-                    {
-                        $expr: {
-                            $eq: [
-                                {
-                                    $concat: [
-                                        "$name.first",
-                                        " ",
-                                        "$name.last"
-                                    ]
-                                },
-                                searchFields[field]
-                            ]
-                        }
-                    },
-                    { 'name.first': { $regex: searchFields[field], $options: 'i' } },
-                    { 'name.last': { $regex: searchFields[field], $options: 'i' } }
-                ];
-            } else if (field === 'country' || field === 'city' || field === 'state') {
-                match[`location.${field}`] = { $regex: searchFields[field], $options: 'i' }
-            } else if (field === 'age') {
-                match['dob.age'] = searchFields[field]
-            } else if (field == 'gender') {
-                match[field] = { $eq: searchFields[field] }
-            } else if (field === 'email') {
-                match[field] = searchFields[field]
+            if (searchFields[field]) {
+                applySearchField(field, searchFields[field], match);
             }
         }
     }
-
     // Sorting logic
-    let sort: Record<string, any> = {};
-    let order: number = query.order === 'desc' ? -1 : 1;
+    const sort: Record<string, any> = {};
+    const order: number = query.order === 'desc' ? -1 : 1;
     if (query.sortBy === 'name') {
-        sort = { 'name.first': order, 'name.last': order };
+        sort['name.first'] = order,
+        sort['name.last']= order ;
     } else if (query.sortBy === 'country') {
-        sort = { 'location.country': order }
+        sort['location.country'] = order 
     } else if (query.sortBy === 'age') {
-        sort = { 'dob.age': order }
+        sort['dob.age'] = order 
     } else {
-        sort[query.sortBy || 'createdAt'] = order;
+        sort['createdAt'] = order;
     }
 
     // Pagination logic
     const limit: number = Number(query.limit) || 10;
     const page: number = Number(query.page) || 1;
     const skip: number = (page - 1) * limit;
-    return await getAllUsersService({ match, sort, skip, limit, page });
+    return await userService.getAllUsers({ match, sort, skip, limit, page });
 
 }

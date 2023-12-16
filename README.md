@@ -30,6 +30,9 @@ Application aims to seed the randomly generated users from an [external api](htt
 4. The application would be up and running on the specified port. 
 `http://localhost:3000`
 
+## Logs
+1. Application logs can be seen in ./logs/server.log
+
 ## Unit Test
 Test are written using [Jest framework](https://jestjs.io/)
 1. To run unit tests execute command `npm run test`
